@@ -1,0 +1,33 @@
+{
+  "name": "restaurant-loyalty-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend for restaurant loyalty application",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "vercel-build": "echo 'No build step required'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "stripe": "^12.18.0"
+  },
+  "devDependencies": {
+    "axios": "^1.9.0",
+    "firebase-admin": "^13.3.0",
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
