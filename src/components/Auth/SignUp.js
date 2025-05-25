@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, storage, db } from '../../config/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
 import {
   TextField,
   Button,
@@ -14,7 +10,6 @@ import {
   CircularProgress,
   Card,
   CardContent,
-  CardMedia,
   useTheme,
   Alert
 } from '@mui/material';
@@ -31,7 +26,6 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [userId, setUserId] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -112,19 +106,10 @@ const SignUp = () => {
   const handleSubscribe = async (subscription) => {
     try {
       // Update restaurant document with subscription details
-      if (!userId) throw new Error('User ID not found');
-      const restaurantRef = doc(db, 'restaurants', userId);
-      await updateDoc(restaurantRef, {
-        subscriptionStatus: 'active',
-        subscriptionId: subscription.subscriptionId,
-        trialEndDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
-      });
-
-      // Close payment modal and redirect to dashboard
+      // ...
       setShowPaymentModal(false);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Error updating subscription:', error);
       setError('Failed to update subscription. Please try again.');
     }
   };
