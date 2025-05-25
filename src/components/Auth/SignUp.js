@@ -76,7 +76,7 @@ const SignUp = () => {
 
     try {
       const apiUrl = process.env.REACT_APP_API_URL || '';
-      const res = await fetch(`${apiUrl}/api/auth/register`, {
+      const res = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
