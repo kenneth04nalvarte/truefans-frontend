@@ -22,7 +22,6 @@ const libraries = ['places'];
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
