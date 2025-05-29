@@ -12,7 +12,7 @@ import { useAuth } from './contexts/AuthContext';
 import { getDoc, doc } from 'firebase/firestore';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navigation/Navbar';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import DinerRegistration from './components/Diner/DinerRegistration';
 import DigitalPassManager from './components/DigitalPass/DigitalPassManager';
