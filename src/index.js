@@ -15,3 +15,20 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// Set up global fetch wrapper to always include Authorization header if token exists
+const originalFetch = window.fetch;
+window.fetch = async (input, init = {}) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    init.headers = init.headers || {};
+    if (typeof init.headers.append === 'function') {
+      // If Headers object
+      init.headers.append('Authorization', `Bearer ${token}`);
+    } else {
+      // If plain object
+      init.headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  return originalFetch(input, init);
+};

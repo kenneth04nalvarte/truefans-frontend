@@ -1,3 +1,4 @@
+// Trigger Netlify redeploy: trivial change
 import React, { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
@@ -49,14 +50,22 @@ const Login = () => {
             }
 
             localStorage.setItem('token', data.token);
+            // Set Authorization header for all future fetch requests
+            const originalFetch = window.fetch;
+            window.fetch = async (input, init = {}) => {
+              const token = localStorage.getItem('token');
+              if (token) {
+                init.headers = init.headers || {};
+                if (typeof init.headers.append === 'function') {
+                  init.headers.append('Authorization', `Bearer ${token}`);
+                } else {
+                  init.headers['Authorization'] = `Bearer ${token}`;
+                }
+              }
+              return originalFetch(input, init);
+            };
             // Redirect based on user role
-            if (data.user.role === 'restaurant_owner') {
-                navigate('/dashboard');
-            } else if (data.user.role === 'admin') {
-                navigate('/admin/dashboard');
-            } else {
-                navigate('/profile');
-            }
+            navigate('/dashboard');
         } catch (err) {
             setError(err.message);
         } finally {
