@@ -10,15 +10,18 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ProximityNotifier from './components/Proximity/ProximityNotifier';
 import { useAuth } from './contexts/AuthContext';
 import { getDoc, doc } from 'firebase/firestore';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navigation/Navbar';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import DinerRegistration from './components/Diner/DinerRegistration';
-import DigitalPassManager from './components/DigitalPass/DigitalPassManager';
-import PassManagement from './components/PassManagement/PassManagement';
+import DigitalPassManager from './components/Restaurant/DigitalPassManager';
+import PassManagement from './components/Pass/PassManagement';
 import Settings from './components/Settings/Settings';
 import Subscription from './components/Subscription/Subscription';
+import { db } from './config/firebase';
+
+const theme = createTheme();
 
 function App() {
   const { currentUser } = useAuth();
