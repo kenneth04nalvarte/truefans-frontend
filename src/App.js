@@ -13,7 +13,7 @@ import { getDoc, doc } from 'firebase/firestore';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navigation/Navbar';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import PrivateRoute from './components/Auth/PrivateRoute';
 import DinerRegistration from './components/Diner/DinerRegistration';
 import DigitalPassManager from './components/Restaurant/DigitalPassManager';
 import PassManagement from './components/Pass/PassManagement';
