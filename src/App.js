@@ -5,6 +5,7 @@ import Login from './components/Auth/Login';
 import SignUp from './components/Auth/SignUp';
 import Navbar from './components/Navigation/Navbar';
 import DigitalPassManager from './components/Restaurant/DigitalPassManager';
+import PrivateRoute from './components/Auth/PrivateRoute';
 
 function App() {
   return (
