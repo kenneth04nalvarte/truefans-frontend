@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -27,8 +27,19 @@ const DinerRegistration = () => {
   const [success, setSuccess] = useState(false);
   const [passUrl, setPassUrl] = useState('');
   const [confirmed, setConfirmed] = useState(false);
+  const [locationPermission, setLocationPermission] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+  useEffect(() => {
+    // Request location permission when component mounts
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => setLocationPermission(true),
+        () => setLocationPermission(false)
+      );
+    }
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,18 +50,35 @@ const DinerRegistration = () => {
     setLoading(true);
     setError('');
     try {
+      // Get current location if permission granted
+      let location = null;
+      if (locationPermission) {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        location = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          timestamp: position.timestamp
+        };
+      }
+
       await addDoc(collection(db, 'diners'), {
         ...form,
         restaurantId,
         birthday: form.birthday ? Timestamp.fromDate(new Date(form.birthday)) : null,
-        createdAt: Timestamp.now()
+        createdAt: Timestamp.now(),
+        location,
+        locationPermission
       });
+
       // Call backend to generate pass
       const response = await axios.post(`${BACKEND_URL}/api/digital-passes/generate`, {
         name: form.name,
         phone: form.phone,
         birthday: form.birthday,
-        restaurantId
+        restaurantId,
+        location
       });
       if (response.data.success) {
         setPassUrl(response.data.downloadUrl);
@@ -73,6 +101,11 @@ const DinerRegistration = () => {
           <Typography variant="h5" gutterBottom>
             Show this pass at the restaurant to earn rewards and enjoy exclusive offers!
           </Typography>
+          {locationPermission && (
+            <Alert severity="info" sx={{ mb: 3 }}>
+              You will receive notifications when you are near the restaurant.
+            </Alert>
+          )}
           <Button variant="contained" color="primary" size="large" onClick={() => window.location.href = '/'}>
             Back to Home
           </Button>
@@ -105,64 +138,82 @@ const DinerRegistration = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
-      <Typography variant="h4" gutterBottom>
-        Diner Registration
+      <Typography variant="h4" gutterBottom align="center">
+        Join Our Loyalty Program
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      <Typography variant="body1" paragraph align="center" color="text.secondary">
+        Register to receive your digital pass and start earning rewards!
+      </Typography>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
+
+      <form onSubmit={handleSubmit}>
         <TextField
-          label="Full Name"
+          fullWidth
+          label="Name"
           name="name"
           value={form.name}
           onChange={handleChange}
-          fullWidth
           required
-          sx={{ mb: 2 }}
+          margin="normal"
         />
         <TextField
+          fullWidth
           label="Phone Number"
           name="phone"
           value={form.phone}
           onChange={handleChange}
-          fullWidth
           required
-          sx={{ mb: 2 }}
+          margin="normal"
         />
         <TextField
-          select
-          label="How did you hear about us?"
-          name="heardAbout"
-          value={form.heardAbout}
-          onChange={handleChange}
           fullWidth
-          required
-          sx={{ mb: 2 }}
-        >
-          {referralOptions.map((option) => (
-            <MenuItem key={option} value={option}>{option}</MenuItem>
-          ))}
-        </TextField>
-        <TextField
           label="Birthday"
           name="birthday"
           type="date"
           value={form.birthday}
           onChange={handleChange}
-          fullWidth
+          margin="normal"
           InputLabelProps={{ shrink: true }}
-          required
-          sx={{ mb: 2 }}
         />
+        <TextField
+          fullWidth
+          select
+          label="How did you hear about us?"
+          name="heardAbout"
+          value={form.heardAbout}
+          onChange={handleChange}
+          margin="normal"
+        >
+          {referralOptions.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {!locationPermission && (
+          <Alert severity="info" sx={{ mb: 3 }}>
+            Enable location services to receive notifications when you're near the restaurant.
+          </Alert>
+        )}
+
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
+          size="large"
           disabled={loading}
+          sx={{ mt: 3 }}
         >
           {loading ? <CircularProgress size={24} /> : 'Register'}
         </Button>
-      </Box>
+      </form>
     </Container>
   );
 };

@@ -51,13 +51,7 @@ const Login = () => {
 
             localStorage.setItem('token', data.token);
             // Redirect based on user role
-            if (data.user.role === 'restaurant_owner') {
-                navigate('/dashboard');
-            } else if (data.user.role === 'admin') {
-                navigate('/admin/dashboard');
-            } else {
-                navigate('/profile');
-            }
+            navigate('/dashboard');
         } catch (err) {
             setError(err.message);
         } finally {
