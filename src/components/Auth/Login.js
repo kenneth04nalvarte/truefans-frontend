@@ -50,6 +50,20 @@ const Login = () => {
             }
 
             localStorage.setItem('token', data.token);
+            // Set Authorization header for all future fetch requests
+            const originalFetch = window.fetch;
+            window.fetch = async (input, init = {}) => {
+              const token = localStorage.getItem('token');
+              if (token) {
+                init.headers = init.headers || {};
+                if (typeof init.headers.append === 'function') {
+                  init.headers.append('Authorization', `Bearer ${token}`);
+                } else {
+                  init.headers['Authorization'] = `Bearer ${token}`;
+                }
+              }
+              return originalFetch(input, init);
+            };
             // Redirect based on user role
             navigate('/dashboard');
         } catch (err) {
