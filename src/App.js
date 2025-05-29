@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Login from './components/Auth/Login';
 import SignUp from './components/Auth/SignUp';
+import Navbar from './components/Navigation/Navbar';
+import DigitalPassManager from './components/Restaurant/DigitalPassManager';
 
 function App() {
   return (
