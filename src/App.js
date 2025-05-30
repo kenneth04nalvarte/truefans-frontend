@@ -24,7 +24,8 @@ import { db } from './config/firebase';
 const theme = createTheme();
 
 function App() {
-  const { currentUser } = useAuth();
+  const auth = useAuth() || {};
+  const { currentUser } = auth;
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
