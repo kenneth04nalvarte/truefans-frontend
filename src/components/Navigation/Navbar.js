@@ -21,7 +21,8 @@ const Navbar = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const user = auth.currentUser;
-  const { userRole } = React.useContext(AuthContext);
+  const authContext = React.useContext(AuthContext) || {};
+  const { userRole } = authContext;
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
