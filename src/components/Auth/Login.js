@@ -8,7 +8,6 @@ import {
     TextField,
     Button,
     Box,
-    Link,
     Alert
 } from '@mui/material';
 
@@ -117,20 +116,18 @@ const Login = () => {
                         {loading ? 'Logging in...' : 'Login'}
                     </Button>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                        <Link
-                            component={RouterLink}
+                        <RouterLink
                             to="/forgot-password"
                             variant="body2"
                         >
                             Forgot password?
-                        </Link>
-                        <Link
-                            component={RouterLink}
+                        </RouterLink>
+                        <RouterLink
                             to="/register"
                             variant="body2"
                         >
                             Don't have an account? Sign Up
-                        </Link>
+                        </RouterLink>
                     </Box>
                 </Box>
             </Paper>

@@ -8,11 +8,10 @@ import {
   Box,
   Alert,
   CircularProgress,
-  Grid,
-  Avatar
+  Grid
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -116,7 +115,6 @@ const RestaurantRegistration = () => {
         status: 'pending',
         updatedAt: new Date().toISOString()
       };
-      await addDoc(collection(db, 'restaurants'), restaurantData);
       await setDoc(doc(db, 'restaurants', userCredential.user.uid), restaurantData);
       navigate('/dashboard');
     } catch (error) {

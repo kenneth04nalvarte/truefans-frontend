@@ -22,11 +22,6 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-} from '@mui/icons-material';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';

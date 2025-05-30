@@ -13,17 +13,13 @@ import {
   CardActions
 } from '@mui/material';
 import {
-  QrCode2 as QrCodeIcon,
-  LocalOffer as OfferIcon,
-  Warning as WarningIcon
+  QrCode2 as QrCodeIcon
 } from '@mui/icons-material';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
