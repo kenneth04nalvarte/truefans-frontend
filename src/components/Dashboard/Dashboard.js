@@ -85,7 +85,7 @@ const Dashboard = () => {
             Welcome to TrueFans!
           </Typography>
           <Typography variant="body1" paragraph>
-            You haven't registered your restaurant yet. Let's get started!
+            You haven&apos;t registered your restaurant yet. Let&apos;s get started!
           </Typography>
           <Button
             variant="contained"
@@ -151,7 +151,7 @@ const Dashboard = () => {
                 Analytics
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                View insights about your restaurant's performance and customer engagement.
+                View insights about your restaurant&apos;s performance and customer engagement.
               </Typography>
             </CardContent>
             <CardActions>

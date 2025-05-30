@@ -198,7 +198,7 @@ const DinerRegistration = () => {
 
         {!locationPermission && (
           <Alert severity="info" sx={{ mb: 3 }}>
-            Enable location services to receive notifications when you're near the restaurant.
+            Enable location services to receive notifications when you&apos;re near the restaurant.
           </Alert>
         )}
 

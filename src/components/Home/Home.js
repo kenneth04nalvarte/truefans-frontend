@@ -66,7 +66,7 @@ const Home = () => {
                   fontSize: { xs: '2.5rem', md: '3.5rem' }
                 }}
               >
-                Transform Your Restaurant's Loyalty Program
+                Transform Your Restaurant&apos;s Loyalty Program
               </Typography>
               <Typography
                 variant="h5"

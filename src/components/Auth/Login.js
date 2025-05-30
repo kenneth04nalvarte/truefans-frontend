@@ -126,7 +126,7 @@ const Login = () => {
                             to="/register"
                             variant="body2"
                         >
-                            Don't have an account? Sign Up
+                            Don&apos;t have an account? Sign Up
                         </RouterLink>
                     </Box>
                 </Box>
