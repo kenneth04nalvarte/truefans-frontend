@@ -32,7 +32,7 @@ const RestaurantRegistration = () => {
     brandColor: '#1976d2',
     promotionalText: '',
   });
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
 
   useEffect(() => {
     // Get restaurant location from address
