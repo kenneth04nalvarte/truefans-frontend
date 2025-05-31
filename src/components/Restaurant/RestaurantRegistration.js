@@ -56,6 +56,7 @@ const RestaurantRegistration = () => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
+      console.log("Auth state changed, user:", firebaseUser);
     });
     return () => unsubscribe();
   }, []);

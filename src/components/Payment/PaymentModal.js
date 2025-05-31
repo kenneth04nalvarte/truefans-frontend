@@ -118,7 +118,7 @@ const PaymentForm = ({ onSuccess, onCancel }) => {
           variant="contained"
           startIcon={loading ? <CircularProgress size={20} /> : <PaymentIcon />}
           size="large"
-          disabled={!stripe || loading}
+          disabled={loading}
         >
           {loading ? 'Processing...' : 'Start Free Trial'}
         </Button>
