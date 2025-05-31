@@ -95,6 +95,8 @@ const RestaurantRegistration = () => {
         setLoading(false);
         return;
       }
+      // TEMP: Bypass geocoding/location for testing
+      const location = { latitude: 0, longitude: 0 };
       // Create restaurant document
       let logoUrl = '';
       if (formData.logo) {
