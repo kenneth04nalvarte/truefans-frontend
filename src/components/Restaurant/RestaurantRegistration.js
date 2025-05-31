@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const RestaurantRegistration = () => {
   const navigate = useNavigate();
@@ -33,6 +33,7 @@ const RestaurantRegistration = () => {
     promotionalText: '',
   });
   const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
+  const [user, setUser] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,19 +52,25 @@ const RestaurantRegistration = () => {
     }
   };
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      console.log("Current user before logo upload:", user);
       if (!user) {
         setError("You must be logged in to register a restaurant.");
         setLoading(false);
         return;
       }
+      console.log("Current user before logo upload:", user);
       // TEMP: Bypass geocoding/location for testing
       // const location = { latitude: 0, longitude: 0 };
       // Create restaurant document
