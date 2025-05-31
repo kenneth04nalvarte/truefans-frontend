@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
 const RestaurantRegistration = () => {
   const navigate = useNavigate();
@@ -22,8 +22,6 @@ const RestaurantRegistration = () => {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    password: '',
     phone: '',
     address: '',
     city: '',
@@ -32,6 +30,7 @@ const RestaurantRegistration = () => {
     cuisine: '',
     logo: null,
     brandColor: '#1976d2',
+    promotionalText: '',
   });
   const [location, setLocation] = useState(null);
 
@@ -41,17 +40,25 @@ const RestaurantRegistration = () => {
       if (formData.address && formData.city && formData.state && formData.zipCode) {
         const address = `${formData.address}, ${formData.city}, ${formData.state} ${formData.zipCode}`;
         try {
+          console.log('Geocoding address:', address);
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
           );
           const data = await response.json();
+          console.log('Geocoding response:', data);
           if (data.results && data.results[0]) {
             const { lat, lng } = data.results[0].geometry.location;
             setLocation({ latitude: lat, longitude: lng });
+          } else {
+            setLocation(null);
+            console.warn('No geocoding results found for address:', address);
           }
         } catch (err) {
+          setLocation(null);
           console.error('Error getting location:', err);
         }
+      } else {
+        setLocation(null);
       }
     };
 
@@ -80,24 +87,25 @@ const RestaurantRegistration = () => {
     setLoading(true);
     setError('');
     try {
-      // Create user account
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-
+      const auth = getAuth();
+      const user = auth.currentUser;
+      console.log("Current user before logo upload:", user);
+      if (!user) {
+        setError("You must be logged in to register a restaurant.");
+        setLoading(false);
+        return;
+      }
       // Create restaurant document
       let logoUrl = '';
       if (formData.logo) {
         const storage = getStorage();
-        const logoRef = ref(storage, `restaurants/${userCredential.user.uid}/logo`);
+        const logoRef = ref(storage, `restaurants/${Date.now()}/logo`);
         await uploadBytes(logoRef, formData.logo);
         logoUrl = await getDownloadURL(logoRef);
       }
       const restaurantData = {
+        ownerId: user.uid,
         name: formData.name,
-        email: formData.email,
         phone: formData.phone,
         address: formData.address,
         city: formData.city,
@@ -111,11 +119,13 @@ const RestaurantRegistration = () => {
         subscriptionStatus: 'trial',
         logo: logoUrl,
         brandColor: formData.brandColor,
-        ownerId: userCredential.user.uid,
+        promotionalText: formData.promotionalText,
         status: 'pending',
         updatedAt: new Date().toISOString()
       };
-      await setDoc(doc(db, 'restaurants', userCredential.user.uid), restaurantData);
+      // Use a random id for the restaurant
+      const restaurantId = `rest_${Date.now()}`;
+      await setDoc(doc(db, 'restaurants', restaurantId), restaurantData);
       navigate('/dashboard');
     } catch (error) {
       setError(error.message);
@@ -140,30 +150,6 @@ const RestaurantRegistration = () => {
                 label="Restaurant Name"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
               />
@@ -265,6 +251,18 @@ const RestaurantRegistration = () => {
                 onChange={handleChange}
                 sx={{ height: '56px' }}
                 disabled={loading}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Promotional Text"
+                name="promotionalText"
+                value={formData.promotionalText}
+                onChange={handleChange}
+                disabled={loading}
+                helperText="This text will be shown to your customers and can be edited anytime."
               />
             </Grid>
             <Grid item xs={12}>
