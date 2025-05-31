@@ -34,9 +34,6 @@ const RestaurantRegistration = () => {
   });
   const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
 
-  // TEMP: Bypass geocoding/location for testing
-  const location = { latitude: 0, longitude: 0 };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
