@@ -20,12 +20,12 @@ import {
   Star as StarIcon,
   Payment as PaymentIcon
 } from '@mui/icons-material';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import stripePromise from '../../config/stripe';
+// import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+// import stripePromise from '../../config/stripe';
 
 const PaymentForm = ({ onSuccess, onCancel }) => {
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -34,22 +34,22 @@ const PaymentForm = ({ onSuccess, onCancel }) => {
     setLoading(true);
     setError(null);
 
-    if (!stripe || !elements) {
-      return;
-    }
+    // if (!stripe || !elements) {
+    //   return;
+    // }
 
     try {
       // Create payment method
-      const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: elements.getElement(CardElement),
-      });
+      // const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
+      //   type: 'card',
+      //   card: elements.getElement(CardElement),
+      // });
 
-      if (stripeError) {
-        setError(stripeError.message);
-        setLoading(false);
-        return;
-      }
+      // if (stripeError) {
+      //   setError(stripeError.message);
+      //   setLoading(false);
+      //   return;
+      // }
 
       // Create subscription
       const response = await fetch('/api/create-subscription', {
@@ -58,7 +58,7 @@ const PaymentForm = ({ onSuccess, onCancel }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          paymentMethodId: paymentMethod.id,
+          // paymentMethodId: paymentMethod.id,
           priceId: process.env.REACT_APP_STRIPE_PRICE_ID,
         }),
       });
@@ -80,7 +80,7 @@ const PaymentForm = ({ onSuccess, onCancel }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Box sx={{ mb: 3 }}>
-        <CardElement
+        {/* <CardElement
           options={{
             style: {
               base: {
@@ -95,7 +95,7 @@ const PaymentForm = ({ onSuccess, onCancel }) => {
               },
             },
           }}
-        />
+        /> */}
       </Box>
 
       {error && (
@@ -204,9 +204,9 @@ const PaymentModal = ({ open, onClose, onSubscribe }) => {
         </Box>
       </DialogContent>
 
-      <Elements stripe={stripePromise}>
-        <PaymentForm onSuccess={handleSuccess} onCancel={onClose} />
-      </Elements>
+      {/* <Elements stripe={stripePromise}> */}
+      <PaymentForm onSuccess={handleSuccess} onCancel={onClose} />
+      {/* </Elements> */}
     </Dialog>
   );
 };

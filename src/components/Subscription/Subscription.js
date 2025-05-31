@@ -1,24 +1,24 @@
 import React from 'react';
 import { Container, Paper, Typography, Button, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { loadStripe } from '@stripe/stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const Subscription = () => {
   const handleSubscribe = async () => {
-    try {
-      const res = await fetch('/api/stripe/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
-      if (!data.sessionId) throw new Error('Failed to create Stripe session');
-      const stripe = await stripePromise;
-      await stripe.redirectToCheckout({ sessionId: data.sessionId });
-    } catch (err) {
-      alert('Stripe Checkout error: ' + err.message);
-    }
+    // try {
+    //   const res = await fetch('/api/stripe/create-checkout-session', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //   });
+    //   const data = await res.json();
+    //   if (!data.sessionId) throw new Error('Failed to create Stripe session');
+    //   const stripe = await stripePromise;
+    //   await stripe.redirectToCheckout({ sessionId: data.sessionId });
+    // } catch (err) {
+    //   alert('Stripe Checkout error: ' + err.message);
+    // }
   };
 
   return (
